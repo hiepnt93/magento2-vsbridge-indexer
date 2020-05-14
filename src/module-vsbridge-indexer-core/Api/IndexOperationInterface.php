@@ -49,7 +49,7 @@ interface IndexOperationInterface
      *
      * @return string
      */
-    public function getIndexAlias(StoreInterface $store);
+    public function getIndexAlias($indexIdentifier,StoreInterface $store);
 
     /**
      * @param string $indexIdentifier

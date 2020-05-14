@@ -64,6 +64,11 @@ class GenericIndexerHandler
     private $bulkLogger;
 
     /**
+     * @var string
+     */
+    private $fullIndexName;
+
+    /**
      * GenericIndexerHandler constructor.
      *
      * @param BulkLoggerInterface $bulkLogger
@@ -90,6 +95,7 @@ class GenericIndexerHandler
         $this->indexIdentifier = $indexIdentifier;
         $this->indexerRegistry = $indexerRegistry;
         $this->transactionKey = $transactionKey->load();
+        $this->fullIndexName = $this->indexIdentifier.','.$this->typeName;
     }
 
     /**
@@ -203,10 +209,10 @@ class GenericIndexerHandler
     public function cleanUpByTransactionKey(StoreInterface $store, array $docIds = null)
     {
         try {
-            $indexAlias = $this->getIndexOperation($store->getId())->getIndexAlias($store);
+            $indexAlias = $this->getIndexOperation($store->getId())->getIndexAlias($this->fullIndexName,$store);
 
             if ($this->getIndexOperation($store->getId())->indexExists($indexAlias)) {
-                $index = $this->getIndexOperation($store->getId())->getIndexByName($this->indexIdentifier, $store);
+                $index = $this->getIndexOperation($store->getId())->getIndexByName($this->fullIndexName, $store);
                 $transactionKeyQuery = ['must_not' => ['term' => ['tsk' => $this->transactionKey]]];
                 $query = ['query' => ['bool' => $transactionKeyQuery]];
 
@@ -249,9 +255,9 @@ class GenericIndexerHandler
     private function getIndex(StoreInterface $store)
     {
         try {
-            $index = $this->getIndexOperation($store->getId())->getIndexByName($this->indexIdentifier, $store);
+            $index = $this->getIndexOperation($store->getId())->getIndexByName($this->fullIndexName, $store);
         } catch (Exception $e) {
-            $index = $this->getIndexOperation($store->getId())->createIndex($this->indexIdentifier, $store);
+            $index = $this->getIndexOperation($store->getId())->createIndex($this->fullIndexName, $store);
         }
 
         return $index;

@@ -1,7 +1,7 @@
 <indices xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="urn:magento:module:Divante_VsbridgeIndexerCore:etc/vsbridge_indices.xsd">
 
-    <index identifier="vue_storefront_catalog">
+    <index identifier="vue_storefront_catalog_product">
         <type name="product" mapping="Divante\VsbridgeIndexerCatalog\Index\Mapping\Product">
             <data_providers>
                 <data_provider name="downloadable_data">Divante\VsbridgeDownloadable\Model\Indexer\DataProvider\Product\DownloadableData</data_provider>

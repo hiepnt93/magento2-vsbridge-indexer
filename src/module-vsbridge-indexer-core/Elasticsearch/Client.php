@@ -107,6 +107,7 @@ class Client implements ClientInterface
             [
                 'index' => $indexName,
                 'type'  => $type,
+                'include_type_name' => true,
                 'body'  => [$type => $mapping],
             ]
         );

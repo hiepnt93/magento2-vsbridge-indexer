@@ -27,6 +27,7 @@ class IndexSettings
      */
     private $settingConfig;
 
+
     /**
      * IndexSettings constructor.
      *
@@ -57,8 +58,14 @@ class IndexSettings
      */
     public function getEsConfig()
     {
-        return [
-            'index.mapping.total_fields.limit' => $this->settingConfig->getFieldsLimit(),
+        $settings = [
+            'index' => [
+                'mapping' => [
+                    'total_fields' => [
+                        'limit' => $this->settingConfig->getFieldsLimit()
+                    ]
+                ]
+            ],
             'analysis' => [
                 'analyzer' => [
                     'autocomplete' => [
@@ -79,34 +86,40 @@ class IndexSettings
                 ]
             ]
         ];
+
+        return ['settings' => $settings];
     }
 
     /**
+     * @param $indexIdentifier
      * @param StoreInterface $store
      *
      * @return string
      */
-    public function createIndexName(StoreInterface $store)
+    public function createIndexName($indexIdentifier,StoreInterface $store)
     {
-        $name = $this->getIndexAlias($store);
+        $name = $this->getIndexAlias($indexIdentifier,$store);
         $currentDate = new \DateTime();
 
         return $name . '_' . $currentDate->getTimestamp();
     }
 
     /**
+     * @param $indexIdentifier
      * @param StoreInterface $store
      *
      * @return string
      */
-    public function getIndexAlias(StoreInterface $store)
+    public function getIndexAlias($indexIdentifier,StoreInterface $store)
     {
-        $indexNamePrefix = $this->getIndexNamePrefix();
+        $indexIdentifier = explode(',',$indexIdentifier);
+        $indexNamePrefix = $indexIdentifier[0];
         $storeIdentifier = $this->getStoreIdentifier($store);
 
         if ($storeIdentifier) {
             $indexNamePrefix .= '_' . $storeIdentifier;
         }
+        $indexNamePrefix.= '_'.$indexIdentifier[1];
 
         return strtolower($indexNamePrefix);
     }

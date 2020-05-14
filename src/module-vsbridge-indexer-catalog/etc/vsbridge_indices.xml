@@ -1,7 +1,7 @@
 <indices xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="urn:magento:module:Divante_VsbridgeIndexerCore:etc/vsbridge_indices.xsd">
 
-    <index identifier="vue_storefront_catalog">
+    <index identifier="vue_storefront_catalog_product">
         <type name="product" mapping="Divante\VsbridgeIndexerCatalog\Index\Mapping\Product">
             <data_providers>
                 <data_provider name="attributes">Divante\VsbridgeIndexerCatalog\Model\Indexer\DataProvider\Product\AttributeData</data_provider>
@@ -17,12 +17,17 @@
                 <data_provider name="parent_data">Divante\VsbridgeIndexerCatalog\Model\Indexer\DataProvider\Product\ParentSku</data_provider>
             </data_providers>
         </type>
-        <type name="category" mapping="Divante\VsbridgeIndexerCatalog\Index\Mapping\Category">
+    </index>
+    <index identifier="vue_storefront_catalog_category">
+    <type name="category" mapping="Divante\VsbridgeIndexerCatalog\Index\Mapping\Category">
             <data_providers>
                 <data_provider name="category_data">Divante\VsbridgeIndexerCatalog\Model\Indexer\DataProvider\Category\AttributeData</data_provider>
             </data_providers>
         </type>
-        <type name="attribute" mapping="Divante\VsbridgeIndexerCatalog\Index\Mapping\Attribute">
+    </index>
+    <index identifier="vue_storefront_catalog_attribute">
+
+    <type name="attribute" mapping="Divante\VsbridgeIndexerCatalog\Index\Mapping\Attribute">
             <data_providers>
                 <data_provider name="options">Divante\VsbridgeIndexerCatalog\Model\Indexer\DataProvider\Attribute\Options</data_provider>
             </data_providers>

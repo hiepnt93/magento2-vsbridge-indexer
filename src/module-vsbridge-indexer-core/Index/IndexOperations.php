@@ -127,7 +127,7 @@ class IndexOperations implements IndexOperationInterface
      */
     public function getIndexByName($indexIdentifier, StoreInterface $store)
     {
-        $indexAlias = $this->indexSettings->getIndexAlias($store);
+        $indexAlias = $this->indexSettings->getIndexAlias($indexIdentifier,$store);
 
         if (!isset($this->indicesByIdentifier[$indexAlias])) {
             if (!$this->indexExists($indexAlias)) {
@@ -145,9 +145,9 @@ class IndexOperations implements IndexOperationInterface
     /**
      * @inheritdoc
      */
-    public function getIndexAlias(StoreInterface $store)
+    public function getIndexAlias($indexIdentifier,StoreInterface $store)
     {
-        return $this->indexSettings->getIndexAlias($store);
+        return $this->indexSettings->getIndexAlias($indexIdentifier,$store);
     }
 
     /**
@@ -230,20 +230,23 @@ class IndexOperations implements IndexOperationInterface
      */
     private function initIndex($indexIdentifier, StoreInterface $store, $existingIndex)
     {
+        $indexIdentifiers = explode(',', $indexIdentifier);
+        $newIdentifier = str_replace(',','_',$indexIdentifier);
+
         $this->getIndicesConfiguration();
 
-        if (!isset($this->indicesConfiguration[$indexIdentifier])) {
+        if (!isset($this->indicesConfiguration[$newIdentifier])) {
             throw new \LogicException('No configuration found');
         }
 
-        $indexName = $this->indexSettings->createIndexName($store);
-        $indexAlias = $this->indexSettings->getIndexAlias($store);
+        $indexName = $this->indexSettings->createIndexName($indexIdentifier,$store);
+        $indexAlias = $this->indexSettings->getIndexAlias($indexIdentifier,$store);
 
         if ($existingIndex) {
             $indexName = $indexAlias;
         }
 
-        $config = $this->indicesConfiguration[$indexIdentifier];
+        $config = $this->indicesConfiguration[$newIdentifier];
         $types = $config['types'];
 
         /** @var Index $index */
